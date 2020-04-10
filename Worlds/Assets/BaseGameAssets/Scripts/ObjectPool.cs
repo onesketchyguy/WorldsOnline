@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour
+public class ObjectPool : NetworkBehaviour
 {
     public static ObjectPool localInstance;
 
@@ -34,6 +34,8 @@ public class ObjectPool : MonoBehaviour
 
     private bool PoolContains(GameObject obj)
     {
+        if (pool == null) return false;
+
         for (int i = 0; i < pool.Length; i++)
         {
             if (pool[i] == obj) return true;
@@ -66,7 +68,6 @@ public class ObjectPool : MonoBehaviour
                 {
                     if (item.activeSelf == false)
                     {
-                        item.SetActive(true);
                         return item;
                     }
                 }
@@ -88,6 +89,7 @@ public class ObjectPool : MonoBehaviour
         var newObj = GetObject(obj);
 
         newObj.transform.position = pos;
+        newObj.SetActive(true);
 
         return newObj;
     }

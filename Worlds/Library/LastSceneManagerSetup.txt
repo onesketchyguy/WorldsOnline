@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/WorldGeneration/Testing.unity
+- path: Assets/BaseGameAssets/Scenes/SampleScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

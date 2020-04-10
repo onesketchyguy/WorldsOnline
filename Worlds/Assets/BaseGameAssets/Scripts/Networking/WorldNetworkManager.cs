@@ -42,8 +42,11 @@ namespace World
         {
             base.OnClientDisconnect(conn);
 
-            if (OnDisconnectEvent != null)
-                OnDisconnectEvent.Invoke();
+            if (conn.identity.isLocalPlayer)
+            {
+                if (OnDisconnectEvent != null)
+                    OnDisconnectEvent.Invoke();
+            }
         }
 
         public override void OnServerDisconnect(NetworkConnection conn)

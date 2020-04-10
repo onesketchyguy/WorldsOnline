@@ -32,6 +32,8 @@ namespace Player
             if (!isLocalPlayer)
                 return;
             gameObject.name = playerName;
+
+            CmdSend($"[LOGEVENT]{playerName} joined the game.");
         }
 
         private void Update()

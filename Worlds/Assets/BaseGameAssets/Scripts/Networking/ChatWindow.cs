@@ -19,9 +19,41 @@ namespace World
 
         private void OnPlayerMessage(PlayerController player, string message)
         {
-            string prettyMessage = player.isLocalPlayer ?
-                $"<color=red>{player.playerName}: </color> {message}" :
-                $"<color=blue>{player.playerName}: </color> {message}";
+            string prettyMessage;
+
+            if (message.Contains("[LOGEVENT]"))
+            {
+                // Remove the phrase "[LOGEVENT]"
+                var n_string = "";
+                bool canAdd = true;
+                for (int i = 0; i < message.Length; i++)
+                {
+                    var character = message[i];
+                    if (character == '[')
+                    {
+                        canAdd = false;
+                    }
+                    else if (character == ']')
+                    {
+                        // We can add the NEXT character, but skip this one.
+                        canAdd = true;
+                        continue;
+                    }
+
+                    if (canAdd)
+                        n_string += character;
+                }
+
+                message = n_string;
+                prettyMessage = $"<color=red>{message} </color>";
+            }
+            else
+            {
+                prettyMessage = player.isLocalPlayer ?
+                    $"<color=blue>{player.playerName}: </color> {message}" :
+                    $"<color=green>{player.playerName}: </color> {message}";
+            }
+
             AppendMessage(prettyMessage);
 
             Debug.Log(message);

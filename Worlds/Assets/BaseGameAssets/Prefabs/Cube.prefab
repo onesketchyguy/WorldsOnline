@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 1652276662346538583}
   - component: {fileID: 1652276662346538580}
   - component: {fileID: 1758296893252437497}
-  - component: {fileID: 440940816147739231}
+  - component: {fileID: -5273720635409255691}
+  - component: {fileID: -4498018872289312025}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Editable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,7 +111,28 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
---- !u!114 &440940816147739231
+--- !u!114 &-5273720635409255691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652276662346538581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1731d8de2d0c84333b08ebe1e79f4118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  visRange: 20
+  visUpdateInterval: 1
+  checkMethod: 0
+  forceHidden: 0
+  castLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &-4498018872289312025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

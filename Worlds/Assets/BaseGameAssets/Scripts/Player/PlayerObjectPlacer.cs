@@ -23,6 +23,8 @@ namespace Player
                 controller = GetComponent<PlayerController>();
         }
 
+        private LastButton buttonDown;
+
         private void Update()
         {
             if (!isLocalPlayer) return;
@@ -46,7 +48,7 @@ namespace Player
                 objectPlacerGhost.position = pos;
             }
 
-            if (controller.lastButton == LastButton.fire2) // Right click
+            if (buttonDown != controller.lastButton && buttonDown == LastButton.fire2) // Right click
             {
                 // Debug, will move to having an object manager
 
@@ -55,12 +57,44 @@ namespace Player
                 if (col == null || col.Length <= 0)
                     CmdPlaceObject(objectPlacerGhost.position);
             }
+
+            if (buttonDown != controller.lastButton && buttonDown == LastButton.fire1) // left click
+            {
+                // Debug, will move to having an object manager
+
+                var col = Physics.OverlapBox(objectPlacerGhost.transform.position, Vector3.one * 0.25f);
+
+                if (col != null && col.Length > 0 && col[0].tag == "Editable")
+                {
+                    CmdRemoveObject(col[0].gameObject);
+                }
+            }
+
+            buttonDown = controller.lastButton;
         }
 
         [Command]
         private void CmdPlaceObject(Vector3 pos)
         {
-            ObjectPool.localInstance.GetObject(prefabToSpawnOnClick, pos);
+            CmdSnapToGrid(ObjectPool.localInstance.GetObject(prefabToSpawnOnClick, pos));
+        }
+
+        [Command]
+        private void CmdRemoveObject(GameObject objectToReturn)
+        {
+            objectToReturn.SetActive(false);
+            objectToReturn.SetActive(false);
+            ObjectPool.localInstance.ReturnObject(objectToReturn);
+        }
+
+        [Command]
+        private void CmdSnapToGrid(GameObject objectToSnap)
+        {
+            var x = (int)objectToSnap.transform.position.x;
+            var y = (int)objectToSnap.transform.position.y;
+            var z = (int)objectToSnap.transform.position.z;
+
+            objectToSnap.transform.position = new Vector3(x, y, z);
         }
     }
 }
