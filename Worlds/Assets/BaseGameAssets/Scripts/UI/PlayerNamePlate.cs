@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Player
+namespace World.Player
 {
     [RequireComponent(typeof(Text))]
     public class PlayerNamePlate : MonoBehaviour
@@ -12,7 +10,14 @@ namespace Player
 
         private void Start()
         {
-            GetComponent<Text>().text = $"{player.playerName}";
+            // Set the text of our name plate
+            if (player == null)
+                GetComponent<Text>().text = "";
+            else
+                GetComponent<Text>().text = $"{player.playerName}";
+
+            // Then clean up this component by removing it
+            Destroy(this);
         }
     }
 }

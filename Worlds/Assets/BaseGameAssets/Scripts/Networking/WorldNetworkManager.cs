@@ -1,9 +1,10 @@
 ﻿using Mirror;
-using Player;
 using UnityEngine;
 
 namespace World
 {
+    using Player;
+
     public class WorldNetworkManager : NetworkManager
     {
         public UnityEngine.Events.UnityEvent OnDisconnectEvent;
@@ -62,6 +63,8 @@ namespace World
             // create a gameobject using the name supplied by client
             GameObject playergo = Instantiate(playerPrefab);
             playergo.GetComponent<PlayerController>().playerName = createPlayerMessage.name;
+
+            Enemies.EnemyBlackBoard.players.Add(playergo.transform);
 
             // set it as the player
             NetworkServer.AddPlayerForConnection(connection, playergo);

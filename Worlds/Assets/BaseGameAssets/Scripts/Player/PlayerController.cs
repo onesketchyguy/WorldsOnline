@@ -2,12 +2,22 @@
 using Mirror;
 using Unity.Mathematics;
 
-namespace Player
+namespace World.Player
 {
     public class PlayerController : NetworkBehaviour, IInput
     {
         public float3 axisInput { get; set; }
-        public LastButton lastButton { get; set; }
+        public Button[] latestButtons { get; set; }
+
+        public bool ButtonsContains(Button button)
+        {
+            for (int i = 0; i < latestButtons.Length; i++)
+            {
+                if (latestButtons[i] == button) return true;
+            }
+
+            return false;
+        }
 
         [SyncVar]
         public string playerName;
@@ -33,7 +43,9 @@ namespace Player
                 return;
             gameObject.name = playerName;
 
-            CmdSend($"[LOGEVENT]{playerName} joined the game.");
+            latestButtons = new Button[3];
+
+            CmdSend($"[LOG]{playerName} joined the game.");
         }
 
         private void Update()
@@ -41,31 +53,20 @@ namespace Player
             if (!isLocalPlayer)
                 return;
 
-            axisInput = new float3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+            axisInput = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal")).normalized;
+            UpdateButtons();
+        }
 
-            switch (lastButton)
-            {
-                case LastButton.none:
-                    if (Input.GetButton("Fire1")) lastButton = LastButton.fire1;
-                    if (Input.GetButton("Fire2")) lastButton = LastButton.fire2;
-                    if (Input.GetButton("Fire3")) lastButton = LastButton.fire3;
-                    break;
+        private void UpdateButtons()
+        {
+            if (Input.GetButtonDown("Fire1")) latestButtons[0] = Button.fire1;
+            else if (Input.GetButtonUp("Fire1")) latestButtons[0] = Button.none;
 
-                case LastButton.fire1:
-                    if (Input.GetButtonUp("Fire1")) lastButton = LastButton.none;
-                    break;
+            if (Input.GetButtonDown("Fire2")) latestButtons[1] = Button.fire2;
+            else if (Input.GetButtonUp("Fire2")) latestButtons[1] = Button.none;
 
-                case LastButton.fire2:
-                    if (Input.GetButtonUp("Fire2")) lastButton = LastButton.none;
-                    break;
-
-                case LastButton.fire3:
-                    if (Input.GetButtonUp("Fire3")) lastButton = LastButton.none;
-                    break;
-
-                default:
-                    break;
-            }
+            if (Input.GetButtonDown("Fire3")) latestButtons[2] = Button.fire3;
+            else if (Input.GetButtonUp("Fire3")) latestButtons[2] = Button.none;
         }
     }
 }

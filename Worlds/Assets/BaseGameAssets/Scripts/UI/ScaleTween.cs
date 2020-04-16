@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI
+namespace WorldsUI
 {
     public class ScaleTween : MonoBehaviour
     {

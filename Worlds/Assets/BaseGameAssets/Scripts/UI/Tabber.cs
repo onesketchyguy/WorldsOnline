@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace UI
+namespace WorldsUI
 {
     /// <summary>
     /// Create a toggler for an array of objects.

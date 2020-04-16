@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace UI
+namespace WorldsUI
 {
     public class BillboardFaceCamera : MonoBehaviour
     {

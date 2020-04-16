@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿using Mirror;
+using UnityEngine;
 
-namespace Player
+namespace World.Player
 {
-    public class PlayerAnimator : MonoBehaviour
+    public class PlayerAnimator : InputReceiver
     {
-        public PlayerController controller;
         public Animator animator;
         private new Rigidbody rigidbody;
 
@@ -16,28 +16,54 @@ namespace Player
         [Space]
         public string absSpeed = "Speed";
 
-        private void Start()
-        {
-            if (controller == null)
-                controller = GetComponent<PlayerController>();
-
-            rigidbody = controller.GetComponent<Rigidbody>();
-        }
-
         private void Update()
         {
-            if (controller == null)
+            if (!isLocalPlayer) return;
+
+            if (inputManager == null)
             {
                 Debug.LogError($"No player controller assigned to: {gameObject.name}:{nameof(PlayerAnimator)}");
                 Destroy(this);
                 return;
             }
 
-            animator.SetBool(button1, controller.lastButton == LastButton.fire1);
-            animator.SetBool(button2, controller.lastButton == LastButton.fire2);
+            CmdSetBool(button1, inputManager.ButtonsContains(Button.fire1));
+            CmdSetBool(button2, inputManager.ButtonsContains(Button.fire2));
 
-            var val = (Mathf.Abs(rigidbody.velocity.x) + Mathf.Abs(rigidbody.velocity.z));
-            animator.SetFloat(absSpeed, val);
+            var val = (Mathf.Abs(inputManager.axisInput.x) + Mathf.Abs(inputManager.axisInput.z));
+            CmdSetFloat(absSpeed, val * 0.5f);
         }
+
+        /// <summary>
+        /// Tell the server to set a bool
+        /// </summary>
+        /// <param name="_float"></param>
+        /// <param name="value"></param>
+        [Command]
+        private void CmdSetBool(string _bool, bool value) => RpcSetBool(_bool, value);
+
+        /// <summary>
+        /// Tell the server to set a float
+        /// </summary>
+        /// <param name="_float"></param>
+        /// <param name="value"></param>
+        [Command]
+        private void CmdSetFloat(string _float, float value) => RpcSetFloat(_float, value);
+
+        /// <summary>
+        /// Tell the client to set a bool
+        /// </summary>
+        /// <param name="_float"></param>
+        /// <param name="value"></param>
+        [ClientRpc]
+        private void RpcSetBool(string _bool, bool value) => animator.SetBool(_bool, value);
+
+        /// <summary>
+        /// Tell the client to set a float
+        /// </summary>
+        /// <param name="_float"></param>
+        /// <param name="value"></param>
+        [ClientRpc]
+        private void RpcSetFloat(string _float, float value) => animator.SetFloat(_float, value);
     }
 }

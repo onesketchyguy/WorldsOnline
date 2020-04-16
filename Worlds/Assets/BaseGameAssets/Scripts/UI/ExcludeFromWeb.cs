@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UI
+namespace WorldsUI
 {
     public class ExcludeFromWeb : MonoBehaviour
     {

@@ -1,14 +1,16 @@
 ﻿using Unity.Mathematics;
 
-namespace Player
+namespace World.Player
 {
     public interface IInput
     {
         float3 axisInput { get; set; }
-        LastButton lastButton { get; set; }
+        Button[] latestButtons { get; set; }
+
+        bool ButtonsContains(Button button);
     }
 
-    public enum LastButton
+    public enum Button
     {
         none,
         fire1,

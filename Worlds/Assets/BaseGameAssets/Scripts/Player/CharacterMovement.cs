@@ -1,31 +1,18 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
 
-namespace Player
+namespace World.Player
 {
-    public class CharacterMovement : MonoBehaviour
+    public class CharacterMovement : InputReceiver
     {
         public new Rigidbody rigidbody;
 
         public float speed = 5;
         public float runMultiplier = 1.65f;
 
-        private IInput inputManager;
-
-        private void SetInputManager()
+        internal override void Start()
         {
-            inputManager = GetComponent<IInput>();
-
-            if (inputManager == null)
-            {
-                Debug.LogError($"Unable to find IInput component on {gameObject.name}:{typeof(CharacterController)}");
-                Destroy(this);
-            }
-        }
-
-        private void Start()
-        {
-            SetInputManager();
+            base.Start();
 
             if (rigidbody == null)
                 rigidbody = GetComponent<Rigidbody>() ?? gameObject.AddComponent<Rigidbody>();
@@ -44,21 +31,21 @@ namespace Player
 
         private void Update()
         {
-            var invert = new float3(inputManager.axisInput.z, 0, inputManager.axisInput.x);
-            invert = Vector3.Normalize(invert);
+            var invert = new Vector3(inputManager.axisInput.z, 0, inputManager.axisInput.x).normalized;
 
             var d_pos = new float3(invert.x, rigidbody.velocity.y, invert.z);
 
-            var spd = inputManager.lastButton == LastButton.fire3 ? speed * runMultiplier : speed;
+            var spd = inputManager.ButtonsContains(Button.fire3) ? speed * runMultiplier : speed;
             rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, d_pos * spd, spd * Time.deltaTime);
             rigidbody.angularVelocity = Vector3.zero;
 
             if (CompareFloat3(invert, lookVector) == false && (inputManager.axisInput.z != 0 || inputManager.axisInput.x != 0))
             {
                 lookVector = invert;
-
-                rigidbody.MoveRotation(Quaternion.LookRotation(lookVector));
             }
+
+            if (inputManager.ButtonsContains(Button.fire2) == false)
+                rigidbody.MoveRotation(Quaternion.LookRotation(lookVector));
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace WorldsUI
 {
     public class NetworkDiscoveryHUD : MonoBehaviour
     {
@@ -27,7 +27,7 @@ namespace UI
         private void CreateServerButton(ServerResponse info)
         {
             var go = Instantiate(serverButtonPrefab, serverButtonParent);
-            go.GetComponentInChildren<Text>().text = $"{info.EndPoint.Address.ToString()} - Click to join";
+            go.GetComponentInChildren<Text>().text = $"{info.EndPoint.Address}:{info.EndPoint.Port} - Click to join";
             go.name = info.serverId.ToString();
 
             go.GetComponentInChildren<Button>().onClick.AddListener(() => Connect(info));

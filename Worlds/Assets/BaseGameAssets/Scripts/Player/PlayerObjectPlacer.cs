@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace Player
+namespace World.Player
 {
     public class PlayerObjectPlacer : NetworkBehaviour
     {
@@ -23,7 +23,7 @@ namespace Player
                 controller = GetComponent<PlayerController>();
         }
 
-        private LastButton buttonDown;
+        private Button buttonDown;
 
         private void Update()
         {
@@ -47,30 +47,30 @@ namespace Player
 
                 objectPlacerGhost.position = pos;
             }
+            /*
+                        if (buttonDown != controller.latestButtons && buttonDown == Button.fire2) // Right click
+                        {
+                            // Debug, will move to having an object manager
 
-            if (buttonDown != controller.lastButton && buttonDown == LastButton.fire2) // Right click
-            {
-                // Debug, will move to having an object manager
+                            var col = Physics.OverlapBox(objectPlacerGhost.transform.position, Vector3.one * 0.25f);
 
-                var col = Physics.OverlapBox(objectPlacerGhost.transform.position, Vector3.one * 0.25f);
+                            if (col == null || col.Length <= 0)
+                                CmdPlaceObject(objectPlacerGhost.position);
+                        }
 
-                if (col == null || col.Length <= 0)
-                    CmdPlaceObject(objectPlacerGhost.position);
-            }
+                        if (buttonDown != controller.latestButtons && buttonDown == Button.fire1) // left click
+                        {
+                            // Debug, will move to having an object manager
 
-            if (buttonDown != controller.lastButton && buttonDown == LastButton.fire1) // left click
-            {
-                // Debug, will move to having an object manager
+                            var col = Physics.OverlapBox(objectPlacerGhost.transform.position, Vector3.one * 0.25f);
 
-                var col = Physics.OverlapBox(objectPlacerGhost.transform.position, Vector3.one * 0.25f);
+                            if (col != null && col.Length > 0 && col[0].tag == "Editable")
+                            {
+                                CmdRemoveObject(col[0].gameObject);
+                            }
+                        }
 
-                if (col != null && col.Length > 0 && col[0].tag == "Editable")
-                {
-                    CmdRemoveObject(col[0].gameObject);
-                }
-            }
-
-            buttonDown = controller.lastButton;
+                        buttonDown = controller.latestButtons;*/
         }
 
         [Command]

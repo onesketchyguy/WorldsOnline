@@ -1,11 +1,12 @@
 ﻿using Mirror;
-using Player;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace World
 {
+    using Player;
+
     public class ChatWindow : MonoBehaviour
     {
         public InputField chatMessage;
@@ -21,9 +22,9 @@ namespace World
         {
             string prettyMessage;
 
-            if (message.Contains("[LOGEVENT]"))
+            if (message.ToLower().Contains("[log]"))
             {
-                // Remove the phrase "[LOGEVENT]"
+                // Remove the phrase "[LOG]"
                 var n_string = "";
                 bool canAdd = true;
                 for (int i = 0; i < message.Length; i++)
@@ -33,7 +34,7 @@ namespace World
                     {
                         canAdd = false;
                     }
-                    else if (character == ']')
+                    else if (character == ']' && canAdd == false)
                     {
                         // We can add the NEXT character, but skip this one.
                         canAdd = true;
