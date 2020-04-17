@@ -17,6 +17,8 @@ namespace World.Enemies
         private void Start()
         {
             hoverFromY = transform.position.y;
+
+            StartCoroutine(UpdatePosition());
         }
 
         private void UpdateY()
@@ -29,20 +31,23 @@ namespace World.Enemies
             Debug.DrawRay(ray.origin, ray.direction * hitInfo.distance);
         }
 
-        private void Update()
+        private IEnumerator UpdatePosition()
         {
-            var pos = transform.position;
+            while (true)
+            {
+                var pos = transform.position;
 
-            if (pos.y > hoverFromY + (bounceRange / 2f))
-                goingUp = false;
-            else if (pos.y < hoverFromY - (bounceRange / 2f))
-                goingUp = true;
+                if (pos.y > hoverFromY + (bounceRange / 2f))
+                    goingUp = false;
+                else if (pos.y < hoverFromY - (bounceRange / 2f))
+                    goingUp = true;
 
-            var bounceDist = goingUp ? bounceRange : -bounceRange;
-            var d_pos = new Vector3(pos.x, pos.y + bounceDist, pos.z);
-            transform.position = Vector3.Slerp(pos, d_pos, (Vector3.Distance(transform.position, d_pos)) * bounceSpeed * Time.deltaTime);
+                var bounceDist = goingUp ? bounceRange : -bounceRange;
+                var d_pos = new Vector3(pos.x, pos.y + bounceDist, pos.z);
+                transform.position = Vector3.Slerp(pos, d_pos, (Vector3.Distance(transform.position, d_pos)) * bounceSpeed * Time.deltaTime);
 
-            //UpdateY();
+                yield return null;
+            }
         }
 
         private void OnDrawGizmosSelected()
