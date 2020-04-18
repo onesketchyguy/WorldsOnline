@@ -15,7 +15,7 @@ namespace Mirror
     [HelpURL("https://mirror-networking.com/docs/Components/NetworkManagerHUD.html")]
     public class NetworkManagerHUD : MonoBehaviour
     {
-        NetworkManager manager;
+        private NetworkManager manager;
 
         /// <summary>
         /// Whether to show the default control HUD at runtime.
@@ -32,12 +32,12 @@ namespace Mirror
         /// </summary>
         public int offsetY;
 
-        void Awake()
+        private void Awake()
         {
             manager = GetComponent<NetworkManager>();
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             if (!showGUI)
                 return;

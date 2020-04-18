@@ -1,6 +1,4 @@
 ﻿using Mirror;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace World.Player
@@ -46,7 +44,7 @@ namespace World.Player
 
                 lookAt.y = transform.position.y;
 
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookAt));
+                transform.rotation = (Quaternion.LookRotation(lookAt));
             }
         }
 

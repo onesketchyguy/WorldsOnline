@@ -1,5 +1,4 @@
 ﻿using Mirror;
-using UnityEngine;
 
 namespace World
 {
@@ -15,10 +14,10 @@ namespace World
         [SyncVar] public int maxHealth = 100;
         [SyncVar] private float currentHealth = 100;
 
-        [ServerCallback]
-        public void Reset()
+        [ClientRpc]
+        public void RpcReset()
         {
-            ModifyHealth(maxHealth - currentHealth);
+            RpcModifyHealth(maxHealth - currentHealth);
         }
 
         public float GetHealthValue()
@@ -26,8 +25,8 @@ namespace World
             return currentHealth / maxHealth;
         }
 
-        [ServerCallback]
-        public void ModifyHealth(float modAmount)
+        [ClientRpc]
+        public void RpcModifyHealth(float modAmount)
         {
             currentHealth += modAmount;
 

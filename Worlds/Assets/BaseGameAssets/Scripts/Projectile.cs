@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Mirror;
 using UnityEngine;
-using Mirror;
 
 namespace World
 {
@@ -25,7 +23,7 @@ namespace World
             var other = collision.gameObject.GetComponent<HealthManager>();
 
             if (other != null)
-                other.ModifyHealth(-damageToDeal);
+                other.RpcModifyHealth(-damageToDeal);
 
             ObjectPool.localInstance.ReturnObject(gameObject);
         }

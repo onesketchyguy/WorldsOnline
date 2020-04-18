@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace WorldsUI
@@ -16,7 +14,8 @@ namespace WorldsUI
         private void Start()
         {
             HealthManager.OnHealthModifiedCallback += HealthModified;
-            HealthManager.Reset();
+            HealthManager.RpcReset();
+            HealthModified(0);
         }
 
         private void HealthModified(float modAmount)

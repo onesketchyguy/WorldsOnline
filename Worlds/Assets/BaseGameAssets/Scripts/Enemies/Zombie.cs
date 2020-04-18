@@ -88,6 +88,9 @@ namespace World.Enemies
         [ClientRpc]
         private void RpcSetAnimBool(string var, bool value) => anim.SetBool(var, value);
 
+        [ClientRpc]
+        private void RpcSetDestination(Vector3 destination) => navAgent.SetDestination(destination);
+
         private void SearchForTargets()
         {
             if (target != null && Vector3.Distance(transform.position, target.position) >= searchRange)
@@ -132,10 +135,20 @@ namespace World.Enemies
                     if (target.position != navAgent.destination)
                     {
                         // Set the new position
-                        navAgent.SetDestination(target.position);
+                        RpcSetDestination(Clamp(transform.position, target.position, attackRange));
                     }
                 }
             }
+        }
+
+        private Vector3 Clamp(Vector3 clamping, Vector3 clampingTo, float clampRange = 1)
+        {
+            var value = clamping;
+            value.x = Mathf.Clamp(value.x, clampingTo.x - clampRange, clampingTo.x + clampRange);
+            value.y = Mathf.Clamp(value.y, clampingTo.y - clampRange, clampingTo.y + clampRange);
+            value.z = Mathf.Clamp(value.z, clampingTo.z - clampRange, clampingTo.z + clampRange);
+
+            return value;
         }
 
         private void Wander()
@@ -146,7 +159,7 @@ namespace World.Enemies
             var pos = Random.insideUnitSphere * searchRange;
             pos.y = transform.position.y; // Keep the y level with our character
 
-            navAgent.SetDestination(pos);
+            RpcSetDestination(pos);
 
             // Create a timestamp so that when we wander again, it's after we have already reached out destination.
             nextWander = Time.time + (Random.Range(1f, 10F)) + (Vector3.Distance(transform.position, pos));

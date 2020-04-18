@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -49,7 +48,7 @@ namespace WorldsUI
 
                 var go = result.gameObject;
 
-                while (go.transform.parent != null && go.transform.parent.GetComponent<Canvas>() == null)
+                while (go.transform.parent != null)
                 {
                     go = go.transform.parent.gameObject;
                     if (go.gameObject.CompareTag(editableTag))

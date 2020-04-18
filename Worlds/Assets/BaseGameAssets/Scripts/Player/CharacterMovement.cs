@@ -1,11 +1,12 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace World.Player
 {
     public class CharacterMovement : InputReceiver
     {
-        public new Rigidbody rigidbody;
+        public NavMeshAgent navAgent;
 
         public float speed = 5;
         public float runMultiplier = 1.65f;
@@ -14,8 +15,10 @@ namespace World.Player
         {
             base.Start();
 
-            if (rigidbody == null)
-                rigidbody = GetComponent<Rigidbody>() ?? gameObject.AddComponent<Rigidbody>();
+            if (navAgent == null)
+            {
+                navAgent = GetComponent<NavMeshAgent>() ?? gameObject.AddComponent<NavMeshAgent>();
+            }
         }
 
         private float3 lookVector;
@@ -33,11 +36,12 @@ namespace World.Player
         {
             var invert = new Vector3(inputManager.axisInput.z, 0, inputManager.axisInput.x).normalized;
 
-            var d_pos = new float3(invert.x, rigidbody.velocity.y, invert.z);
+            var d_pos = (float3)transform.position + new float3(invert.x, 0, invert.z);
 
             var spd = inputManager.ButtonsContains(Button.fire3) ? speed * runMultiplier : speed;
-            rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, d_pos * spd, spd * Time.deltaTime);
-            rigidbody.angularVelocity = Vector3.zero;
+
+            navAgent.speed = spd;
+            navAgent.SetDestination(d_pos);
 
             if (CompareFloat3(invert, lookVector) == false && (inputManager.axisInput.z != 0 || inputManager.axisInput.x != 0))
             {
@@ -45,7 +49,7 @@ namespace World.Player
             }
 
             if (inputManager.ButtonsContains(Button.fire2) == false)
-                rigidbody.MoveRotation(Quaternion.LookRotation(lookVector));
+                transform.rotation = (Quaternion.LookRotation(lookVector));
         }
     }
 }

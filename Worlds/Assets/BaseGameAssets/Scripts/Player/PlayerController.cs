@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using Mirror;
+﻿using Mirror;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace World.Player
 {
