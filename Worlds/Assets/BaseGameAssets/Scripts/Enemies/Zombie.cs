@@ -44,10 +44,12 @@ namespace World.Enemies
                 anim = GetComponent<Animator>();
         }
 
-        private void Start() {
-            healthManager.onDeathCallback += () => {
+        private void Start()
+        {
+            healthManager.onDeathCallback += () =>
+            {
                 isDead = true;
-                RpcSetAnimBool(death, isDead);
+                if (anim != null) RpcSetAnimBool(death, isDead);
                 Invoke(nameof(RpcReturnObject), timeBeforeCleanup);
             };
         }
@@ -70,8 +72,11 @@ namespace World.Enemies
                 TryAttackTarget();
             }
 
-            RpcSetAnimFloat(moveSpeed, navAgent.velocity.magnitude);
-            RpcSetAnimBool(attack, withinAttackRange);
+            if (anim != null)
+            {
+                RpcSetAnimFloat(moveSpeed, navAgent.velocity.magnitude);
+                RpcSetAnimBool(attack, withinAttackRange);
+            }
         }
 
         [ClientRpc]
