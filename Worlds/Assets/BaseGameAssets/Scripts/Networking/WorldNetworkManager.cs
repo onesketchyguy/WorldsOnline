@@ -1,9 +1,10 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace World
+namespace Worlds
 {
     using Player;
+    using UI;
 
     public class WorldNetworkManager : NetworkManager
     {

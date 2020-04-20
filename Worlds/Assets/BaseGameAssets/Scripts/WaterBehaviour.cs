@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace World.Effects
+namespace Worlds.Effects
 {
     public class WaterBehaviour : MonoBehaviour
     {

@@ -1,17 +1,19 @@
 ﻿using Mirror;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Worlds.Player;
 
-namespace World
+namespace Worlds.UI
 {
-    using Player;
-
     public class ChatWindow : MonoBehaviour
     {
         public InputField chatMessage;
         public Text chatHistory;
         public Scrollbar scrollbar;
+
+        public System.Action<PlayerController, string> OnRecievedPlayerMessage;
 
         public void Awake()
         {
@@ -20,44 +22,8 @@ namespace World
 
         private void OnPlayerMessage(PlayerController player, string message)
         {
-            string prettyMessage;
-
-            if (message.ToLower().Contains("[log]"))
-            {
-                // Remove the phrase "[LOG]"
-                var n_string = "";
-                bool canAdd = true;
-                for (int i = 0; i < message.Length; i++)
-                {
-                    var character = message[i];
-                    if (character == '[')
-                    {
-                        canAdd = false;
-                    }
-                    else if (character == ']' && canAdd == false)
-                    {
-                        // We can add the NEXT character, but skip this one.
-                        canAdd = true;
-                        continue;
-                    }
-
-                    if (canAdd)
-                        n_string += character;
-                }
-
-                message = n_string;
-                prettyMessage = $"<color=red>{message} </color>";
-            }
-            else
-            {
-                prettyMessage = player.isLocalPlayer ?
-                    $"<color=blue>{player.playerName}: </color> {message}" :
-                    $"<color=green>{player.playerName}: </color> {message}";
-            }
-
-            AppendMessage(prettyMessage);
-
-            Debug.Log(message);
+            if (OnRecievedPlayerMessage != null)
+                OnRecievedPlayerMessage.Invoke(player, message);
         }
 
         public void OnSend()
@@ -81,7 +47,33 @@ namespace World
 
         private IEnumerator AppendAndScroll(string message)
         {
-            chatHistory.text += message + "\n";
+            if (message.Contains(':'))
+            {
+                var FullMessage = message.Split(':');
+
+                if (FullMessage.Length > 1)
+                {
+                    chatHistory.text += FullMessage.FirstOrDefault();
+
+                    foreach (var msg in FullMessage)
+                    {
+                        if (msg == FullMessage.FirstOrDefault()) continue;
+                        chatHistory.text += ':';
+
+                        for (int i = 0; i < msg.Length; i++)
+                        {
+                            yield return null;
+                            chatHistory.text += msg[i];
+                        }
+                    }
+                }
+            }
+            else
+            {
+                chatHistory.text += message;
+            }
+
+            chatHistory.text += "\n";
 
             // it takes 2 frames for the UI to update ?!?!
             yield return null;

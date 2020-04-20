@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace World.Player
+namespace Worlds.Player
 {
     public class PlayerAnimator : InputReceiver
     {

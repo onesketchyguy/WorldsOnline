@@ -90,7 +90,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.0005
+    globalScale: 0.05
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
@@ -102,5 +102,5 @@ ModelImporter:
   avatarSetup: 0
   additionalBone: 0
   userData: 
-  assetBundleName: 
+  assetBundleName: model
   assetBundleVariant: 

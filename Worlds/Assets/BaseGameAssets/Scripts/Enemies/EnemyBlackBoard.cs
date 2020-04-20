@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace World.Enemies
+namespace Worlds.Enemies
 {
     public static class EnemyBlackBoard
     {

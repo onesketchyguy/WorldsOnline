@@ -1,6 +1,6 @@
 ﻿using Mirror;
 
-namespace World
+namespace Worlds
 {
     public class HealthManager : NetworkBehaviour
     {
@@ -13,6 +13,11 @@ namespace World
 
         [SyncVar] public int maxHealth = 100;
         [SyncVar] private float currentHealth = 100;
+
+        public float GetCurrentHealth()
+        {
+            return currentHealth;
+        }
 
         [ClientRpc]
         public void RpcReset()

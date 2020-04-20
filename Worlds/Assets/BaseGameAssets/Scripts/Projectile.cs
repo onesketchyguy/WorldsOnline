@@ -1,15 +1,15 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace World
+namespace Worlds
 {
     [RequireComponent(typeof(Rigidbody))]
     public class Projectile : NetworkBehaviour
     {
         private float damageToDeal;
 
-        [Server]
-        public void Launch(Vector3 dir, float force, float damageOnImpact)
+        [ClientRpc]
+        public void RpcLaunch(Vector3 dir, float force, float damageOnImpact)
         {
             damageToDeal = damageOnImpact;
 
@@ -22,10 +22,9 @@ namespace World
             // Check to see if we hit something damagable
             var other = collision.gameObject.GetComponent<HealthManager>();
 
-            if (other != null)
-                other.RpcModifyHealth(-damageToDeal);
+            if (other != null) other.RpcModifyHealth(-damageToDeal);
 
-            ObjectPool.localInstance.ReturnObject(gameObject);
+            ObjectManager.localInstance.ReturnObject(gameObject);
         }
     }
 }

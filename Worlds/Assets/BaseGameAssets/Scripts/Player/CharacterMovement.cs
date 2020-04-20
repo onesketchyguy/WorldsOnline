@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace World.Player
+namespace Worlds.Player
 {
     public class CharacterMovement : InputReceiver
     {

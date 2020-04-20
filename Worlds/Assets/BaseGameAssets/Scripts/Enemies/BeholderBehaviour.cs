@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace World.Enemies
+namespace Worlds.Enemies
 {
     public class BeholderBehaviour : MonoBehaviour
     {

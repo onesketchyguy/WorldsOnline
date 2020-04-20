@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace World.Characters
+namespace Worlds.Characters
 {
     public class Character
     {

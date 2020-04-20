@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace World.Player
+namespace Worlds.Player
 {
     public class PlayerCombat : InputReceiver
     {
@@ -14,6 +14,7 @@ namespace World.Player
             return transform.position + transform.TransformVector(firePoint);
         }
 
+        [SyncVar]
         private bool firing;
 
         private void Update()
@@ -21,8 +22,7 @@ namespace World.Player
             // Shoot
             if (inputManager.ButtonsContains(Button.fire1))
             {
-                if (!firing)
-                    InvokeRepeating(nameof(CmdFire), 0, 0.25f);
+                if (!firing) InvokeRepeating(nameof(CmdFire), 0, 15f * Time.deltaTime);
             }
             else
             {
@@ -35,27 +35,28 @@ namespace World.Player
             {
                 var lookAt = transform.position;
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hitInfo;
                 if (Physics.Raycast(ray, out hitInfo)) // hit an object
                 {
-                    lookAt = hitInfo.point - transform.position;
+                    lookAt = hitInfo.point;
+                    lookAt.y = transform.position.y;
                 }
 
-                lookAt.y = transform.position.y;
-
-                transform.rotation = (Quaternion.LookRotation(lookAt));
+                transform.LookAt(lookAt);
             }
         }
 
         [Command]
         private void CmdFire()
         {
+            if (NetworkServer.active == false) return;
+
             firing = true;
-            var projectile = ObjectPool.localInstance.GetObject(BulletPrefab, GetFirePoint());
+            var projectile = ObjectManager.localInstance.GetObject(BulletPrefab, GetFirePoint());
             projectile.transform.localRotation = transform.rotation;
 
-            projectile.GetComponent<Projectile>().Launch(transform.forward, 1000, 10);
+            projectile.GetComponent<Projectile>().RpcLaunch(transform.forward, 1000, 10);
         }
 
         private void OnDrawGizmos()

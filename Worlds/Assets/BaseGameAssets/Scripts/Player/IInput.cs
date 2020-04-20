@@ -1,6 +1,6 @@
 ﻿using Unity.Mathematics;
 
-namespace World.Player
+namespace Worlds.Player
 {
     public interface IInput
     {

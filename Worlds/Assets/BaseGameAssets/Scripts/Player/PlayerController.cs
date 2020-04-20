@@ -2,12 +2,12 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace World.Player
+namespace Worlds.Player
 {
     public class PlayerController : NetworkBehaviour, IInput
     {
         public float3 axisInput { get; set; }
-        public Button[] latestButtons { get; set; }
+        public Button[] latestButtons { get; set; } = new Button[3];
 
         public bool ButtonsContains(Button button)
         {

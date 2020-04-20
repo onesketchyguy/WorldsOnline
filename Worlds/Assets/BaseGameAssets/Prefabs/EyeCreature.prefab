@@ -5075,7 +5075,7 @@ MonoBehaviour:
   death: die
   timeBeforeCleanup: 1
   navAgent: {fileID: 6144141767759010070}
-  attackRange: 1.5
+  attackRange: 15
   searchRange: 100
 --- !u!114 &6144141767759010092
 MonoBehaviour:

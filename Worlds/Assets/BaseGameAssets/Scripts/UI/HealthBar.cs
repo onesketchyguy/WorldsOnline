@@ -7,14 +7,13 @@ namespace WorldsUI
     {
         public Slider healthBar;
 
-        public World.HealthManager HealthManager;
+        public Worlds.HealthManager HealthManager;
 
         public Gradient healthGradient;
 
         private void Start()
         {
             HealthManager.OnHealthModifiedCallback += HealthModified;
-            HealthManager.RpcReset();
             HealthModified(0);
         }
 

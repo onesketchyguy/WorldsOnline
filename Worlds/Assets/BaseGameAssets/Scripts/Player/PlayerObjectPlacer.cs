@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace World.Player
+namespace Worlds.Player
 {
     public class PlayerObjectPlacer : NetworkBehaviour
     {
@@ -76,7 +76,7 @@ namespace World.Player
         [Command]
         private void CmdPlaceObject(Vector3 pos)
         {
-            CmdSnapToGrid(ObjectPool.localInstance.GetObject(prefabToSpawnOnClick, pos));
+            CmdSnapToGrid(ObjectManager.localInstance.GetObject(prefabToSpawnOnClick, pos));
         }
 
         [Command]
@@ -84,7 +84,7 @@ namespace World.Player
         {
             objectToReturn.SetActive(false);
             objectToReturn.SetActive(false);
-            ObjectPool.localInstance.ReturnObject(objectToReturn);
+            ObjectManager.localInstance.ReturnObject(objectToReturn);
         }
 
         [Command]
