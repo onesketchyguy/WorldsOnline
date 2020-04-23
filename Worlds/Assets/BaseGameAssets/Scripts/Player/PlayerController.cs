@@ -6,6 +6,8 @@ namespace Worlds.Player
 {
     public class PlayerController : NetworkBehaviour, IInput
     {
+        public PlayerStats m_stats;
+
         public float3 axisInput { get; set; }
         public Button[] latestButtons { get; set; } = new Button[3];
 
@@ -42,10 +44,22 @@ namespace Worlds.Player
             if (!isLocalPlayer)
                 return;
             gameObject.name = playerName;
+            InvokeRepeating(nameof(CmdSetupStats), 0, 10 * Time.deltaTime);
 
             latestButtons = new Button[3];
 
             CmdSend($"[LOG]{playerName} joined the game.");
+        }
+
+        [Command]
+        private void CmdSetupStats()
+        {
+            gameObject.GetComponent<CharacterMovement>().speed = 1.5f + (m_stats.stats.Dexterity.GetValue() * 0.075f);
+
+            var healthManager = gameObject.GetComponent<HealthManager>();
+            bool healthFull = healthManager.GetHealthValue() == 1;
+            healthManager.maxHealth = 30 + (m_stats.stats.Constitution.GetValue() * 10);
+            if (healthFull) healthManager.RpcReset();
         }
 
         private void Update()

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     public class HealthBar : MonoBehaviour
     {

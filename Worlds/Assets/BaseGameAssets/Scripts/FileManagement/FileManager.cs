@@ -42,6 +42,7 @@ public static class FileManager
 
     public static T Load<T>(string fileName, Directories directory)
     {
+        CheckDirectory(directory);
         string dir = $"{AppDir}/{directory.ToString()}/{fileName}{fileExtention}";
 
         if (File.Exists(dir) == false)
@@ -49,5 +50,24 @@ public static class FileManager
 
         var data = File.ReadAllText(dir);
         return JsonUtility.FromJson<T>(data);
+    }
+
+    public static T[] LoadAllFromDirectory<T>(Directories directory)
+    {
+        CheckDirectory(directory);
+        var direct = $"{AppDir}/{directory.ToString()}/";
+
+        var list = new System.Collections.Generic.List<T>();
+
+        foreach (var item in Directory.EnumerateFiles(direct))
+        {
+            if (File.Exists(item) == false)
+                continue;
+
+            var data = File.ReadAllText(item);
+            list.Add(JsonUtility.FromJson<T>(data));
+        }
+
+        return list.ToArray();
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     public class ModifyWindowManager : MonoBehaviour
     {

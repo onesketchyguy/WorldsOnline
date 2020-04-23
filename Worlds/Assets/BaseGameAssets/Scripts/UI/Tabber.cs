@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     /// <summary>
     /// Create a toggler for an array of objects.
@@ -25,6 +25,12 @@ namespace WorldsUI
         /// <param name="tab"></param>
         public void ToggleToTab(GameObject tab)
         {
+            if (tab.activeSelf == true && tab != tabs.FirstOrDefault())
+            {
+                ToggleFromTab(); // Return to the first tab if the user is requesting to go back to the same tab they are on.
+                return;
+            }
+
             foreach (var item in tabs)
                 item.SetActive(item == tab);
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     public class Enabler : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     [RequireComponent(typeof(Canvas))]
     public class WorldCanvasSetToMainCamera : MonoBehaviour

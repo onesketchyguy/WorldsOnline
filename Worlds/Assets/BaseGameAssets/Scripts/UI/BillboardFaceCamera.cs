@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     public class BillboardFaceCamera : MonoBehaviour
     {

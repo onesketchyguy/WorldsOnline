@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Worlds.Player
+namespace Worlds.UI
 {
+    using Player;
+
     [RequireComponent(typeof(Text))]
     public class PlayerNamePlate : MonoBehaviour
     {

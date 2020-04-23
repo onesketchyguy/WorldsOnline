@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace WorldsUI
+namespace Worlds.UI
 {
     public class NetworkDiscoveryHUD : MonoBehaviour
     {
