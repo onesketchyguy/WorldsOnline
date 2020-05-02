@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Worlds.UI
@@ -14,15 +12,20 @@ namespace Worlds.UI
 
         public void CreateButtons(Transform parent)
         {
-            //PlayerSaveManager.LoadAll()
+            var saveData = PlayerSaveManager.LoadAll();
 
-            var dat = new PlayerSaveManager.SaveData[] {
-                PlayerSaveManager.Load("Forrest")
-            };
-            if (dat == null || dat.Length < 1) return;
+            //var saveData = new PlayerSaveManager.SaveData[] {
+            //    PlayerSaveManager.Load("Forrest")
+            //};
+            if (saveData == null || saveData.Length < 1) return;
 
-            foreach (var save in dat)
-                CreateButton(save, parent);
+            foreach (var save in saveData)
+            {
+                if (save == null) continue;
+
+                if (string.IsNullOrEmpty(save.userName) == false)
+                    CreateButton(save, parent);
+            }
         }
 
         private void CreateButton(PlayerSaveManager.SaveData saveData, Transform parent)
@@ -44,6 +47,14 @@ namespace Worlds.UI
             // TODO: Load in the character data
             var networkdManager = FindObjectOfType<WorldNetworkManager>();
             networkdManager.PlayerName = saveData.userName;
+            networkdManager.localPlayerStats = new Player.Stats()
+            {
+                Strength = new Player.Stat(saveData.stats[0]),
+                Intelligence = new Player.Stat(saveData.stats[1]),
+                Dexterity = new Player.Stat(saveData.stats[2]),
+                Constitution = new Player.Stat(saveData.stats[3])
+            };
+            networkdManager.playerSpawnPoint = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         }
 
         public void SaveCharacter()

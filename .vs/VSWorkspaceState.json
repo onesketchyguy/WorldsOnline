@@ -1,11 +1,9 @@
 {
   "ExpandedNodes": [
-    "",
     "\\Worlds",
     "\\Worlds\\Assets",
     "\\Worlds\\Assets\\BaseGameAssets",
     "\\Worlds\\Assets\\BaseGameAssets\\Scripts"
   ],
-  "SelectedNode": "\\Worlds\\Assets\\BaseGameAssets\\Scripts\\HealthManager.cs",
   "PreviewInSolutionExplorer": false
 }

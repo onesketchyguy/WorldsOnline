@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Worlds.UI
 {
@@ -13,10 +11,14 @@ namespace Worlds.UI
 
         private void Update()
         {
-            if (Input.GetButtonUp(ButtonName) || Input.GetKeyUp(keyCode))
+            if (string.IsNullOrWhiteSpace(ButtonName))
             {
-                @event.Invoke();
+                if (Input.GetKeyUp(keyCode))
+                    @event.Invoke();
             }
+            else
+            if (Input.GetButtonUp(ButtonName))
+                @event.Invoke();
         }
     }
 }

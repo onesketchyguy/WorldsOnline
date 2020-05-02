@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Worlds.Saves
 {
@@ -34,7 +32,7 @@ namespace Worlds.Saves
 
         public static SaveData[] LoadAll()
         {
-            return FileManager.LoadAllFromDirectory<SaveData>(FileManager.Directories.saves);
+            return FileManager.LoadAllFromDirectory<SaveData>(FileManager.Directories.saves, ".meta");
         }
 
         [System.Serializable]

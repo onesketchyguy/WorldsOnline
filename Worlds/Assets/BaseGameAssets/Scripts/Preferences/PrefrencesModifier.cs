@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class PrefrencesModifier : MonoBehaviour
 {
+    public RenderPipelineAsset[] piplines;
+
+    public Dropdown qualityDropDown;
     public Dropdown resolutionsDropdown;
 
     public Toggle fullscreenToggle;
@@ -15,6 +20,7 @@ public class PrefrencesModifier : MonoBehaviour
 
         SetupFullScreenToggler();
         SetupResolutions();
+        SetupQualitySettings();
 
         LoadInPrefs(PreferencesManager.current_prefs);
     }
@@ -35,12 +41,13 @@ public class PrefrencesModifier : MonoBehaviour
         // Setup the resolutions
         resolutionsDropdown.ClearOptions(); // Clear the list so we can start fresh
         var options = new List<Dropdown.OptionData>(); // Store a temporary resolution options variable
+        var resolutions = Screen.resolutions;
 
         var currentResIndex = 0;
 
-        for (int i = 0; i < Screen.resolutions.Length; i++)
+        for (int i = 0; i < resolutions.Length; i++)
         {
-            Resolution item = Screen.resolutions[i];
+            var item = resolutions[i];
 
             if (Screen.width == item.width && Screen.height == item.height)
                 currentResIndex = i;
@@ -68,9 +75,47 @@ public class PrefrencesModifier : MonoBehaviour
         });
     }
 
+    private void SetupQualitySettings()
+    {
+        qualityDropDown.ClearOptions();
+
+        var options = new List<Dropdown.OptionData>();
+
+        var currentIndex = 0;
+
+        for (int i = 0; i < piplines.Length; i++)
+        {
+            RenderPipelineAsset item = piplines[i];
+            var itemName = item.name.Split('_').LastOrDefault();
+
+            if (item == QualitySettings.renderPipeline) currentIndex = i;
+
+            options.Add(new Dropdown.OptionData()
+            {
+                text = itemName
+            });
+        }
+
+        qualityDropDown.SetValueWithoutNotify(currentIndex);
+
+        qualityDropDown.AddOptions(options);
+        qualityDropDown.onValueChanged.AddListener(
+        (int index) =>
+        {
+            GraphicsSettings.renderPipelineAsset = piplines[index];
+            QualitySettings.renderPipeline = piplines[index];
+
+            PreferencesManager.current_prefs.quality = index;
+
+            PreferencesManager.SaveSettings();
+        });
+    }
+
     public void LoadInPrefs(PreferencesManager.Preferences preferences)
     {
         Screen.SetResolution(preferences.screenX, preferences.screenY, preferences.fullScreen);
+        GraphicsSettings.renderPipelineAsset = piplines[preferences.quality];
+        QualitySettings.renderPipeline = piplines[preferences.quality];
 
         PreferencesManager.SaveSettings();
     }

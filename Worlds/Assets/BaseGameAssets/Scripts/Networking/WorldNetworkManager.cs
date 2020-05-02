@@ -19,11 +19,25 @@ namespace Worlds
             networkAddress = hostname;
         }
 
+        internal Vector3 playerSpawnPoint;
+
         public ChatWindow chatWindow;
+
+        internal Stats localPlayerStats = new Stats()
+        {
+            Dexterity = new Stat(5),
+            Strength = new Stat(5),
+            Intelligence = new Stat(5),
+            Constitution = new Stat(5)
+        };
 
         public class CreatePlayerMessage : MessageBase
         {
             public string name;
+            public int Strength;
+            public int Intelligence;
+            public int Dexterity;
+            public int Constitution;
         }
 
         public override void OnStartServer()
@@ -36,8 +50,21 @@ namespace Worlds
         {
             base.OnClientConnect(conn);
 
+            PlayerName = (PlayerName != null && PlayerName.Length > 0) ? PlayerName : DefaultUserName;
+
+            if (conn.address == NetworkServer.localConnection.address)
+                if (transport != null)
+                    transport.hostName = PlayerName;
+
             // tell the server to create a player with this name
-            conn.Send(new CreatePlayerMessage { name = (PlayerName != null && PlayerName.Length > 0) ? PlayerName : DefaultUserName });
+            conn.Send(new CreatePlayerMessage
+            {
+                name = PlayerName,
+                Strength = localPlayerStats.Strength.value,
+                Intelligence = localPlayerStats.Intelligence.value,
+                Dexterity = localPlayerStats.Dexterity.value,
+                Constitution = localPlayerStats.Constitution.value
+            });
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)
@@ -59,11 +86,19 @@ namespace Worlds
                 OnDisconnectEvent.Invoke();
         }
 
-        private void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
+        private void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage playerMessage)
         {
             // create a gameobject using the name supplied by client
-            GameObject playergo = Instantiate(playerPrefab);
-            playergo.GetComponent<PlayerController>().playerName = createPlayerMessage.name;
+            GameObject playergo = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+            var character = playergo.GetComponent<PlayerController>();
+            character.playerName = playerMessage.name;
+            character.m_stats.stats = new Stats()
+            {
+                Strength = new Stat(playerMessage.Strength),
+                Constitution = new Stat(playerMessage.Constitution),
+                Intelligence = new Stat(playerMessage.Intelligence),
+                Dexterity = new Stat(playerMessage.Dexterity)
+            };
 
             Enemies.EnemyBlackBoard.players.Add(playergo.transform);
 

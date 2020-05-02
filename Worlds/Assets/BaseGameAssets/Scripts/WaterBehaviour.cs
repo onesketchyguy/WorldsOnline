@@ -39,19 +39,13 @@ namespace Worlds.Effects
             StartCoroutine(GenerateWaves());
         }
 
-        private void OnValidate()
-        {
-            if (autoUpdate)
-                CreateShape();
-        }
-
         private void VerifyMesh()
         {
             renderer.mesh = renderer.sharedMesh = mesh = new Mesh();
             if (collider != null) collider.sharedMesh = mesh;
         }
 
-        private void CreateShape()
+        public void CreateShape()
         {
             VerifyMesh();
 

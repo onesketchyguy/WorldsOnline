@@ -59,7 +59,8 @@ namespace Mirror.Discovery
                 return new ServerResponse
                 {
                     serverId = ServerId,
-                    uri = transport.ServerUri()
+                    uri = transport.ServerUri(),
+                    serverHost = transport.hostName
                 };
             }
             catch (NotImplementedException)
@@ -69,7 +70,7 @@ namespace Mirror.Discovery
             }
         }
 
-        #endregion
+        #endregion Server
 
         #region Client
 
@@ -109,6 +110,6 @@ namespace Mirror.Discovery
             OnServerFound.Invoke(response);
         }
 
-        #endregion
+        #endregion Client
     }
 }

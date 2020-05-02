@@ -7,6 +7,7 @@ namespace Mirror.Examples.Tanks
     {
         [Header("Components")]
         public NavMeshAgent agent;
+
         public Animator animator;
 
         [Header("Movement")]
@@ -14,10 +15,11 @@ namespace Mirror.Examples.Tanks
 
         [Header("Firing")]
         public KeyCode shootKey = KeyCode.Space;
+
         public GameObject projectilePrefab;
         public Transform projectileMount;
 
-        void Update()
+        private void Update()
         {
             // movement for local player
             if (!isLocalPlayer)
@@ -42,7 +44,7 @@ namespace Mirror.Examples.Tanks
 
         // this is called on the server
         [Command]
-        void CmdFire()
+        private void CmdFire()
         {
             GameObject projectile = Instantiate(projectilePrefab, projectileMount.position, transform.rotation);
             NetworkServer.Spawn(projectile);
@@ -51,7 +53,7 @@ namespace Mirror.Examples.Tanks
 
         // this is called on the tank that fired for all observers
         [ClientRpc]
-        void RpcOnFire()
+        private void RpcOnFire()
         {
             animator.SetTrigger("Shoot");
         }

@@ -9,9 +9,13 @@ namespace Mirror
 {
     // UnityEvent definitions
     [Serializable] public class ClientDataReceivedEvent : UnityEvent<ArraySegment<byte>, int> { }
+
     [Serializable] public class UnityEventException : UnityEvent<Exception> { }
+
     [Serializable] public class UnityEventInt : UnityEvent<int> { }
+
     [Serializable] public class ServerDataReceivedEvent : UnityEvent<int, ArraySegment<byte>, int> { }
+
     [Serializable] public class UnityEventIntException : UnityEvent<int, Exception> { }
 
     public abstract class Transport : MonoBehaviour
@@ -31,6 +35,7 @@ namespace Mirror
         public abstract bool Available();
 
         #region Client
+
         /// <summary>
         /// Notify subscribers when when this client establish a successful connection to the server
         /// </summary>
@@ -89,10 +94,11 @@ namespace Mirror
         /// </summary>
         public abstract void ClientDisconnect();
 
-        #endregion
+        #endregion Client
 
         #region Server
 
+        public string hostName;
 
         /// <summary>
         /// Retrieves the address of this server.
@@ -165,7 +171,7 @@ namespace Mirror
         /// </summary>
         public abstract void ServerStop();
 
-        #endregion
+        #endregion Server
 
         /// <summary>
         /// The maximum packet size for a given channel.  Unreliable transports

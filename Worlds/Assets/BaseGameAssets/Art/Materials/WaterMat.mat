@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WaterMat
-  m_Shader: {fileID: -6465566751694194690, guid: 8bd95d0abf5d2554b9bdd8cf9a440484,
+  m_Shader: {fileID: -6465566751694194690, guid: 0fd09195041c17f43bd121f31f887349,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -62,8 +62,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Boolean_3FB9D11B: 0
+    - Vector1_30F79896: 0.25
+    - Vector1_50883730: 1.8
     - Vector1_7466D221: 0.1
+    - Vector1_7AEDBD86: 1.5
+    - Vector1_8A42F83F: 0.78
+    - Vector1_B033F4B1: 0
+    - Vector1_B7A08697: 0.1
     - Vector1_BB11A5DE: 0
+    - Vector1_BB7DBD31: 4
+    - Vector1_BFBD32AA: 40
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -86,9 +94,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_11072EC9: {r: 0.059585266, g: 0.59443104, b: 0.9716981, a: 1}
     - Color_13F9D7: {r: 0, g: 0, b: 0, a: 1}
+    - Color_AF50A9E6: {r: 0.6415094, g: 0.63243145, b: 0.63243145, a: 1}
     - Color_C52F83B7: {r: 0.20392157, g: 0.39607844, b: 0.45882353, a: 1}
+    - Color_DBF5C64B: {r: 0.015686275, g: 0.32941177, b: 1, a: 1}
     - Vector2_1080E2A7: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_D528AC00: {r: 3, g: 2, b: 0, a: 0}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

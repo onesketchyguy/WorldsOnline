@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public static class FileManager
@@ -9,7 +10,7 @@ public static class FileManager
     public enum Directories
     {
         saves,
-        settings
+        prefrences
     }
 
     private static void CheckDirectory(Directories directory)
@@ -31,10 +32,11 @@ public static class FileManager
     /// </summary>
     /// <param name="dataToSave"></param>
     /// <param name="directory"></param>
-    public static void Save(object dataToSave, string fileName, Directories directory)
+    /// <param name="prettyFormat">If true, format the output for readability. If false, format the output for minimum size.</param>
+    public static void Save(object dataToSave, string fileName, Directories directory, bool prettyFormat = true)
     {
         CheckDirectory(directory);
-        var data = JsonUtility.ToJson(dataToSave);
+        var data = JsonUtility.ToJson(dataToSave, prettyFormat);
 
         string dir = $"{AppDir}/{directory.ToString()}/{fileName}";
         CreateFile(data, dir);
@@ -52,22 +54,57 @@ public static class FileManager
         return JsonUtility.FromJson<T>(data);
     }
 
-    public static T[] LoadAllFromDirectory<T>(Directories directory)
+    /// <summary>
+    /// Get all the items from a directory.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="directory">The directory to use.</param>
+    /// <param name="filters">Item extentions to filter out.</param>
+    /// <returns></returns>
+    public static T[] LoadAllFromDirectory<T>(Directories directory, params string[] filters)
     {
         CheckDirectory(directory);
         var direct = $"{AppDir}/{directory.ToString()}/";
 
-        var list = new System.Collections.Generic.List<T>();
+        T[] items = new T[] { };
 
-        foreach (var item in Directory.EnumerateFiles(direct))
+        void Add(T item)
         {
-            if (File.Exists(item) == false)
-                continue;
+            var old = items;
+            items = new T[old.Length + 1];
 
-            var data = File.ReadAllText(item);
-            list.Add(JsonUtility.FromJson<T>(data));
+            for (int i = 0; i < old.Length; i++)
+            {
+                items[i] = old[i];
+            }
+
+            items[old.Length] = item;
         }
 
-        return list.ToArray();
+        // get all the files from the directory
+        var files = Directory.EnumerateFiles(direct);
+
+        foreach (var file in files)
+        {
+            var fileName = file.Split('/').LastOrDefault();
+
+            // Check our filters
+            bool canRead = true;
+            for (int i = 0; i < filters.Length; i++)
+                if (fileName.Contains(filters[i])) canRead = false;
+
+            if (canRead == false) continue;
+
+            // Remove the file extention from the name
+            fileName = fileName.Split('.').FirstOrDefault();
+
+            // Get the item from our load functionality
+            var item = Load<T>(fileName, directory);
+
+            // Add it to our array to return
+            Add(item);
+        }
+
+        return items;
     }
 }

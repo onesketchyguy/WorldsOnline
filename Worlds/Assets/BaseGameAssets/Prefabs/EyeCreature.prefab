@@ -4965,7 +4965,7 @@ GameObject:
   - component: {fileID: 6144141767759010065}
   - component: {fileID: 6144141767759010064}
   - component: {fileID: 6144141767759010092}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EyeCreature
   m_TagString: Untagged
   m_Icon: {fileID: 0}

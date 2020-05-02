@@ -14,6 +14,7 @@ namespace Worlds.UI
         public NetworkDiscovery networkDiscovery;
 
         public UnityEngine.Events.UnityEvent onJoinServerEvent;
+        public UnityEngine.Events.UnityEvent onHostServerEvent;
 
         public GameObject serverButtonPrefab;
         public Transform serverButtonParent;
@@ -26,8 +27,10 @@ namespace Worlds.UI
         private void CreateServerButton(ServerResponse info)
         {
             var go = Instantiate(serverButtonPrefab, serverButtonParent);
-            go.GetComponentInChildren<Text>().text = $"{info.EndPoint.Address}:{info.EndPoint.Port} - Click to join";
-            go.name = info.serverId.ToString();
+            var text = go.GetComponentInChildren<Text>();
+            text.alignment = TextAnchor.MiddleCenter;
+            text.text = $"{info.serverHost}:{info.EndPoint.Address}";
+            go.name = info.serverHost.ToString();
 
             go.GetComponentInChildren<Button>().onClick.AddListener(() => Connect(info));
         }
@@ -61,12 +64,23 @@ namespace Worlds.UI
 
         public void Host()
         {
+            if (NetworkServer.localConnection != null)
+            {
+                // A local host exists connect to them instead of trying to host.
+                NetworkManager.singleton.StartClient();
+
+                if (onJoinServerEvent != null)
+                    onJoinServerEvent.Invoke();
+
+                return;
+            }
+
             ClearServerList();
             NetworkManager.singleton.StartHost();
             networkDiscovery.AdvertiseServer();
 
-            if (onJoinServerEvent != null)
-                onJoinServerEvent.Invoke();
+            if (onHostServerEvent != null)
+                onHostServerEvent.Invoke();
         }
 
         public void Connect(ServerResponse info)
