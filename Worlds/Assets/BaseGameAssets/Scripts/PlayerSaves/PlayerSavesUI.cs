@@ -10,21 +10,26 @@ namespace Worlds.UI
         public UnityEngine.Events.UnityEvent OnLoadEvent;
         public GameObject buttonPrefab;
 
+        private void DestroyChildren(Transform parent)
+        {
+            foreach (var item in parent.GetComponentsInChildren<Transform>())
+            {
+                if (item == parent) continue;
+                Destroy(item.gameObject);
+            }
+        }
+
         public void CreateButtons(Transform parent)
         {
+            DestroyChildren(parent);
+
             var saveData = PlayerSaveManager.LoadAll();
-
-            //var saveData = new PlayerSaveManager.SaveData[] {
-            //    PlayerSaveManager.Load("Forrest")
-            //};
             if (saveData == null || saveData.Length < 1) return;
-
             foreach (var save in saveData)
             {
-                if (save == null) continue;
+                if (save == null || string.IsNullOrEmpty(save.userName)) continue;
 
-                if (string.IsNullOrEmpty(save.userName) == false)
-                    CreateButton(save, parent);
+                CreateButton(save, parent);
             }
         }
 
@@ -46,15 +51,15 @@ namespace Worlds.UI
             OnLoadEvent.Invoke(); // Debug
             // TODO: Load in the character data
             var networkdManager = FindObjectOfType<WorldNetworkManager>();
-            networkdManager.PlayerName = saveData.userName;
-            networkdManager.localPlayerStats = new Player.Stats()
+            networkdManager.PlayerName = networkdManager.playerData.name = saveData.userName;
+            networkdManager.playerData = new WorldNetworkManager.CreatePlayerMessage
             {
-                Strength = new Player.Stat(saveData.stats[0]),
-                Intelligence = new Player.Stat(saveData.stats[1]),
-                Dexterity = new Player.Stat(saveData.stats[2]),
-                Constitution = new Player.Stat(saveData.stats[3])
+                Strength = saveData.stats[0],
+                Intelligence = saveData.stats[1],
+                Dexterity = saveData.stats[2],
+                Constitution = saveData.stats[3]
             };
-            networkdManager.playerSpawnPoint = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
+            networkdManager.playerData.position = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         }
 
         public void SaveCharacter()

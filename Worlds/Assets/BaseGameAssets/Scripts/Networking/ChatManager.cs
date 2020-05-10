@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
 using Worlds.Player;
+using UI;
 
 namespace Worlds.UI
 {
@@ -64,8 +65,8 @@ namespace Worlds.UI
             }
 
             chatWindow.AppendMessage(prettyMessage);
+            FindObjectOfType<NotificationManager>().CreateMessage(prettyMessage, 3, Fonts.Default, Backgrounds.none, Icons.none);
             chatLog += $"{prettyMessage}\n";
-            Debug.Log(message);
         }
     }
 }

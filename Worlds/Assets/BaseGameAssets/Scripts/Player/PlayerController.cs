@@ -60,6 +60,8 @@ namespace Worlds.Player
             bool healthFull = healthManager.GetHealthValue() == 1;
             healthManager.maxHealth = 30 + (m_stats.stats.Constitution.GetValue() * 10);
             if (healthFull) healthManager.RpcReset();
+
+            gameObject.GetComponent<PlayerCombat>().damage = (2 * m_stats.stats.Strength.GetValue());
         }
 
         private void Update()

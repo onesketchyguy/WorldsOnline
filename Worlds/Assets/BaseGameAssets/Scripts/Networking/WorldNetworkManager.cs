@@ -19,25 +19,18 @@ namespace Worlds
             networkAddress = hostname;
         }
 
-        internal Vector3 playerSpawnPoint;
-
         public ChatWindow chatWindow;
 
-        internal Stats localPlayerStats = new Stats()
-        {
-            Dexterity = new Stat(5),
-            Strength = new Stat(5),
-            Intelligence = new Stat(5),
-            Constitution = new Stat(5)
-        };
+        public CreatePlayerMessage playerData = new CreatePlayerMessage();
 
         public class CreatePlayerMessage : MessageBase
         {
-            public string name;
-            public int Strength;
-            public int Intelligence;
-            public int Dexterity;
-            public int Constitution;
+            public string name = "USER";
+            public int Strength = 5;
+            public int Intelligence = 5;
+            public int Dexterity = 5;
+            public int Constitution = 5;
+            public Vector3 position;
         }
 
         public override void OnStartServer()
@@ -50,21 +43,11 @@ namespace Worlds
         {
             base.OnClientConnect(conn);
 
+            // tell the server to create a player with this name
             PlayerName = (PlayerName != null && PlayerName.Length > 0) ? PlayerName : DefaultUserName;
 
-            if (conn.address == NetworkServer.localConnection.address)
-                if (transport != null)
-                    transport.hostName = PlayerName;
-
-            // tell the server to create a player with this name
-            conn.Send(new CreatePlayerMessage
-            {
-                name = PlayerName,
-                Strength = localPlayerStats.Strength.value,
-                Intelligence = localPlayerStats.Intelligence.value,
-                Dexterity = localPlayerStats.Dexterity.value,
-                Constitution = localPlayerStats.Constitution.value
-            });
+            playerData.name = PlayerName;
+            conn.Send(playerData);
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)
@@ -89,7 +72,7 @@ namespace Worlds
         private void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage playerMessage)
         {
             // create a gameobject using the name supplied by client
-            GameObject playergo = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+            GameObject playergo = Instantiate(playerPrefab, playerMessage.position, Quaternion.identity);
             var character = playergo.GetComponent<PlayerController>();
             character.playerName = playerMessage.name;
             character.m_stats.stats = new Stats()
