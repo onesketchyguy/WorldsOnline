@@ -1,13 +1,13 @@
 {
-    "userName": "Forrest",
-    "stats": [
-        10,
-        10,
-        10,
-        10
-    ],
-    "health": 130.0,
-    "positionX": -6.567415237426758,
-    "positionY": 0.0,
-    "positionZ": 11.750846862792969
+  "userName": "Forrest",
+  "stats": [
+    20,
+    10,
+    10,
+    8
+  ],
+  "health": 230.0,
+  "positionX": -1.6358370780944825,
+  "positionY": 0.015734246000647546,
+  "positionZ": 7.127045154571533
 }

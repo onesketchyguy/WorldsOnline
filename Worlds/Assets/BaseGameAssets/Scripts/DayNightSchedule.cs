@@ -14,9 +14,8 @@ public class DayNightSchedule : MonoBehaviour
     private void UpdateLighting(float tod)
     {
         RenderSettings.ambientLight = lightingPreset.ambientColor.Evaluate(tod);
-        RenderSettings.fogColor = lightingPreset.fogColor.Evaluate(tod);
-        RenderSettings.fog = true;
-        RenderSettings.fogDensity = lightingPreset.fogIntensity.Evaluate(tod);
+        //RenderSettings.fogColor = lightingPreset.fogColor.Evaluate(tod);
+        //RenderSettings.fogDensity = lightingPreset.fogIntensity.Evaluate(tod);
 
         directionalLight.color = lightingPreset.directionalColor.Evaluate(tod);
         directionalLight.transform.localRotation = Quaternion.Euler((tod * 360f) - 90, 170, 0);

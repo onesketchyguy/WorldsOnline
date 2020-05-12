@@ -43,6 +43,7 @@ namespace Worlds.Player
         {
             if (!isLocalPlayer)
                 return;
+
             gameObject.name = playerName;
             InvokeRepeating(nameof(CmdSetupStats), 0, 10 * Time.deltaTime);
 

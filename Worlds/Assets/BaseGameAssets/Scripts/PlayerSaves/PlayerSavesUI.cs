@@ -8,6 +8,7 @@ namespace Worlds.UI
     public class PlayerSavesUI : MonoBehaviour
     {
         public UnityEngine.Events.UnityEvent OnLoadEvent;
+        public UnityEngine.Events.UnityEvent OnNoLoadsFoundEvent;
         public GameObject buttonPrefab;
 
         private void DestroyChildren(Transform parent)
@@ -24,7 +25,12 @@ namespace Worlds.UI
             DestroyChildren(parent);
 
             var saveData = PlayerSaveManager.LoadAll();
-            if (saveData == null || saveData.Length < 1) return;
+            if (saveData == null || saveData.Length < 1)
+            {
+                if (OnNoLoadsFoundEvent != null)
+                    OnNoLoadsFoundEvent.Invoke();
+                return;
+            }
             foreach (var save in saveData)
             {
                 if (save == null || string.IsNullOrEmpty(save.userName)) continue;

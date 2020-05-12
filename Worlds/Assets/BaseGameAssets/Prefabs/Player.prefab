@@ -143,7 +143,8 @@ MonoBehaviour:
   animator: {fileID: 4355923488465450148}
   button1: Attack1
   button2: Attack2
-  absSpeed: Speed
+  Speed: Speed
+  Death: Dead
 --- !u!114 &6737914275489440038
 MonoBehaviour:
   m_ObjectHideFlags: 0

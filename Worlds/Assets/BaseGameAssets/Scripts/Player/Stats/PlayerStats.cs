@@ -36,7 +36,12 @@ namespace Worlds.Player
     [System.Serializable]
     public class Stat
     {
+        public const int MIN_VALUE = 1;
+        public const int MAX_VALUE = 20;
+
+        [Range(MIN_VALUE, MAX_VALUE)]
         public int value;
+
         public Dictionary<string, int> modifiers = new Dictionary<string, int>();
 
         public Stat(int value)

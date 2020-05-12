@@ -9,6 +9,9 @@ namespace Worlds
         [Tooltip("The health to track.")]
         public HealthManager health;
 
+        public Vector3 velocityToAdd = new Vector3(0, 1, 0);
+        public float velocityRange = 0;
+
         private void Start()
         {
             health.onDeathCallback += () =>
@@ -17,7 +20,13 @@ namespace Worlds
 
                 foreach (var item in itemsToDrop)
                 {
-                    ObjectManager.localInstance.GetObject(item, transform.position + Vector3.up);
+                    var go = ObjectManager.localInstance.GetObject(item, transform.position + Vector3.up);
+                    var rigidBody = go.GetComponent<Rigidbody>();
+                    if (rigidBody != null)
+                    {
+                        rigidBody.AddForce(velocityToAdd +
+                            (Vector3.one * Random.Range(-velocityRange, velocityRange)), ForceMode.Impulse);
+                    }
                 }
             };
         }

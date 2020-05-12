@@ -4,21 +4,30 @@ namespace Worlds.UI
 {
     public class DoEventOnKeyPress : MonoBehaviour
     {
-        public string ButtonName = "Cancel";
-        public KeyCode keyCode = KeyCode.None;
+        public KeyPressEvent[] keyPressEvents;
 
-        public UnityEngine.Events.UnityEvent @event;
+        [System.Serializable]
+        public class KeyPressEvent
+        {
+            public string ButtonName = "Cancel";
+            public KeyCode keyCode = KeyCode.None;
+
+            public UnityEngine.Events.UnityEvent @event;
+        }
 
         private void Update()
         {
-            if (string.IsNullOrWhiteSpace(ButtonName))
+            foreach (var item in keyPressEvents)
             {
-                if (Input.GetKeyUp(keyCode))
-                    @event.Invoke();
+                if (string.IsNullOrWhiteSpace(item.ButtonName))
+                {
+                    if (Input.GetKeyUp(item.keyCode))
+                        item.@event.Invoke();
+                }
+                else
+                if (Input.GetButtonUp(item.ButtonName))
+                    item.@event.Invoke();
             }
-            else
-            if (Input.GetButtonUp(ButtonName))
-                @event.Invoke();
         }
     }
 }
