@@ -15,7 +15,7 @@ namespace Worlds.Player
         public LayerMask attackableLayers;
         public float attackRange = 1.5f;
 
-        public float attackDelay = 0.25f;
+        //public float attackDelay = 0.25f;
 
         private Vector3 GetFirePoint()
         {
@@ -41,7 +41,8 @@ namespace Worlds.Player
                 //StopCoroutine(FireWeapon());
                 if (firing)
                 {
-                    Invoke(nameof(CmdFireRay), attackDelay);
+                    // Moved to animator
+                    //Invoke(nameof(CmdFireRay), attackDelay);
                     firing = false;
                 }
             }
@@ -79,14 +80,14 @@ namespace Worlds.Player
         [Command]
         private void CmdFireProjectile()
         {
-            var projectile = ObjectManager.localInstance.GetObject(BulletPrefab, GetFirePoint());
+            var projectile = ObjectManager.GetObject(BulletPrefab, GetFirePoint());
             projectile.transform.localRotation = transform.rotation;
 
             projectile.GetComponent<Projectile>().RpcLaunch(transform.forward, 1000, 10);
         }
 
         [Command]
-        private void CmdFireRay()
+        public void CmdFireRay()
         {
             var capsuleCast = Physics.SphereCastAll(GetFirePoint(), 0.35f, transform.forward, attackRange, attackableLayers, QueryTriggerInteraction.UseGlobal);
 

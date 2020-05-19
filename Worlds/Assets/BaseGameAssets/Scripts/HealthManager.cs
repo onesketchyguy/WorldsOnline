@@ -33,6 +33,8 @@ namespace Worlds
         [ClientRpc]
         public void RpcModifyHealth(float modAmount)
         {
+            if (currentHealth > maxHealth) currentHealth = maxHealth;
+
             if (modAmount < 0 && currentHealth <= 0) return; // Beating a dead horse
 
             currentHealth += modAmount;

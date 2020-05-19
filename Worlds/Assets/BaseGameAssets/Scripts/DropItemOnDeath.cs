@@ -20,7 +20,7 @@ namespace Worlds
 
                 foreach (var item in itemsToDrop)
                 {
-                    var go = ObjectManager.localInstance.GetObject(item, transform.position + Vector3.up);
+                    var go = ObjectManager.GetObject(item, transform.position + Vector3.up);
                     var rigidBody = go.GetComponent<Rigidbody>();
                     if (rigidBody != null)
                     {

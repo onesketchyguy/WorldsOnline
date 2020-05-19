@@ -33,7 +33,7 @@ namespace Worlds.Enemies
             while (Vector3.Distance(transform.position, spawnPosition) <= antiSpawnRadius)
                 spawnPosition = transform.position + new Vector3(Random.Range(-spawnRadius, spawnRadius), 1, Random.Range(-spawnRadius, spawnRadius));
 
-            var go = ObjectManager.localInstance.GetObject(enemyToSpawn.gameObject, spawnPosition);
+            var go = ObjectManager.GetObject(enemyToSpawn.gameObject, spawnPosition);
             go.name = enemyToSpawn.name;
 
             var enemy = go.GetComponent<BasicEnemyBehaviour>();

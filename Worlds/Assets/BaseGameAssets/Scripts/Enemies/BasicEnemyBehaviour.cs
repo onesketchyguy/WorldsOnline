@@ -13,12 +13,26 @@ namespace Worlds.Enemies
     {
         public HealthManager healthManager;
 
+        public Vector3 firePoint;
+
+        public int damage = 10;
+
+        public LayerMask attackableLayers;
+
+        private Vector3 GetFirePoint()
+        {
+            return transform.position + transform.TransformVector(firePoint);
+        }
+
         [Header("Animation")]
         public Animator anim;
 
         public string moveSpeed = "speed";
         public string attack = "attack1";
+        //public float timeBeforeAttack = 0.5f;
+
         public string death = "die";
+        public string hurt = "hit";
         public float timeBeforeCleanup = 1;
 
         [SyncVar]
@@ -30,6 +44,10 @@ namespace Worlds.Enemies
         public float attackRange = 1.5f;
         public float searchRange = 100;
         private bool withinAttackRange = false;
+
+        public float movementSpeed = 3f;
+
+        private float startSpeed;
 
         private Transform target;
 
@@ -47,11 +65,21 @@ namespace Worlds.Enemies
         [ServerCallback]
         internal virtual void Initialize()
         {
+            RpcSetSpeed(movementSpeed);
+
             healthManager.onDeathCallback += () =>
             {
                 isDead = true;
                 if (anim != null) RpcSetAnimBool(death, isDead);
                 Invoke(nameof(RpcReturnObject), timeBeforeCleanup);
+            };
+
+            healthManager.OnHealthModifiedCallback += (float modAmount) =>
+            {
+                if (modAmount < 0) // hurt
+                {
+                    RpcSetAnimTrigger(hurt);
+                }
             };
 
             healthManager.RpcReset();
@@ -87,10 +115,13 @@ namespace Worlds.Enemies
         }
 
         [ClientRpc]
-        private void RpcReturnObject() => ObjectManager.localInstance.ReturnObject(gameObject);
+        private void RpcReturnObject() => ObjectManager.ReturnObject(gameObject);
 
         [ClientRpc]
         private void RpcSetAnimFloat(string var, float value) => anim.SetFloat(var, value);
+
+        [ClientRpc]
+        private void RpcSetAnimTrigger(string var) => anim.SetTrigger(var);
 
         [ClientRpc]
         private void RpcSetAnimBool(string var, bool value) => anim.SetBool(var, value);
@@ -128,12 +159,30 @@ namespace Worlds.Enemies
             }
         }
 
+        [ClientRpc]
+        public void RpcSetSpeed(float speed)
+        {
+            if (speed == -1) speed = movementSpeed;
+
+            navAgent.speed = speed;
+            navAgent.angularSpeed = speed * 90;
+        }
+
+        //private bool attacking = false;
+
         internal virtual void TryAttackTarget()
         {
             if (Vector3.Distance(transform.position, target.position) <= attackRange)
             {
                 // Attack
-                withinAttackRange = true;
+                withinAttackRange = true; // Let the animator know we are attacking
+
+                // Moved to animator
+                // if (!attacking)
+                // {
+                //     attacking = true;
+                //     //Invoke(nameof(RpcFireRay), timeBeforeAttack);
+                // }
             }
             else
             {
@@ -146,6 +195,33 @@ namespace Worlds.Enemies
                     }
                 }
             }
+        }
+
+        [ClientRpc]
+        public void RpcFireRay()
+        {
+            var capsuleCast = Physics.SphereCastAll(GetFirePoint(), 0.35f, transform.forward, attackRange, attackableLayers, QueryTriggerInteraction.UseGlobal);
+
+            if (capsuleCast != null)
+            {
+                foreach (var hitInfo in capsuleCast)
+                {
+                    if (hitInfo.transform != null)
+                    {
+                        var collision = hitInfo.transform.gameObject;
+
+                        // Check to see if we hit something damagable
+                        var other = collision.GetComponent<HealthManager>();
+
+                        if (other != null) other.RpcModifyHealth(-damage);
+
+                        Debug.DrawRay(GetFirePoint(), transform.forward * hitInfo.distance, Color.red, 1);
+                    }
+                    else Debug.DrawRay(GetFirePoint(), transform.forward * attackRange, Color.black, 1);
+                }
+            }
+
+            // attacking = false;
         }
 
         private Vector3 Clamp(Vector3 clamping, Vector3 clampingTo, float clampRange = 1)
@@ -175,6 +251,9 @@ namespace Worlds.Enemies
         // Draw a debug through gizmos
         private void OnDrawGizmosSelected()
         {
+            Gizmos.DrawWireSphere(GetFirePoint(), .25f);
+            Gizmos.DrawRay(GetFirePoint(), transform.forward);
+
             Gizmos.color = Color.red;
 
             Gizmos.DrawWireSphere(transform.position, searchRange);

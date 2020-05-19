@@ -3,16 +3,12 @@ using UnityEngine;
 
 public class ObjectManager : NetworkBehaviour
 {
-    public static ObjectManager localInstance;
-
-    private void Awake() => localInstance = this;
-
-    public void ReturnObject(GameObject obj)
+    public static void ReturnObject(GameObject obj)
     {
         NetworkServer.Destroy(obj);
     }
 
-    public GameObject GetObject(GameObject obj, Vector3 pos)
+    public static GameObject GetObject(GameObject obj, Vector3 pos, Transform transform = null)
     {
         var newObj = Instantiate(obj, Vector3.zero, Quaternion.identity, transform);
         newObj.name = obj.name;

@@ -3,16 +3,16 @@ ScriptsOnlyBuild:
     Assembly-CSharp-Editor.dll:
     - BuildWindow
     Assembly-CSharp.dll:
-    - DayNightSchedule
     - LightingConditionPreset
     - ObjectManager
     - OnObjectBecomeActiveDoEvent
-    - PrefrencesModifier
     - Quitter
-    - TimeKeeper
     - UI.Notification
     - UI.NotificationManager
+    - Worlds.DayNight.DayNightSchedule
+    - Worlds.DayNight.TimeKeeper
     - Worlds.DropItemOnDeath
+    - Worlds.Effects.AnimatorCallback
     - Worlds.Enemies.BasicEnemyBehaviour
     - Worlds.Enemies.BeholderBehaviour
     - Worlds.Enemies.EnemyManager
@@ -28,6 +28,7 @@ ScriptsOnlyBuild:
     - Worlds.Player.PlayerStats
     - Worlds.Projectile
     - Worlds.ReviveAfterDeath
+    - Worlds.Saves.PrefrencesModifier
     - Worlds.UI.BillboardFaceCamera
     - Worlds.UI.ChatManager
     - Worlds.UI.ChatWindow
@@ -43,6 +44,7 @@ ScriptsOnlyBuild:
     - Worlds.UI.Toggler
     - Worlds.UI.WorldCanvasSetToMainCamera
     - Worlds.WorldNetworkManager
+    - Worlds.WorldObjects.PlantManager
     Cinemachine.dll:
     - Cinemachine.CinemachineBrain
     - Cinemachine.CinemachineComposer
@@ -99,8 +101,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
@@ -153,6 +157,8 @@ ScriptsOnlyBuild:
     - Class: 74
       Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 90
       Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
@@ -374,6 +380,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 15710}
     - Class: 114
       Script: {instanceID: 15714}
+    - Class: 114
+      Script: {instanceID: 59314}
+    - Class: 114
+      Script: {instanceID: 179436}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -963,9 +973,9 @@ ScriptsOnlyBuild:
     className: UniversalRenderPipelineAsset
   - hash:
       serializedVersion: 2
-      Hash: c61ffb3e3d215bef37bcd200c095e6c6
+      Hash: 1e89adaff698f13cc15048614f9bd008
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
+    namespaceName: Worlds.DayNight
     className: TimeKeeper
   - hash:
       serializedVersion: 2
@@ -1119,7 +1129,7 @@ ScriptsOnlyBuild:
     className: VolumeProfile
   - hash:
       serializedVersion: 2
-      Hash: 7a984547ed35dba3aee5557a543142d2
+      Hash: f36b94a0c82f355733f6acdbdf1396d5
     assemblyName: Assembly-CSharp.dll
     namespaceName: Worlds
     className: WorldNetworkManager
@@ -1383,9 +1393,9 @@ ScriptsOnlyBuild:
     className: WaterBehaviour
   - hash:
       serializedVersion: 2
-      Hash: 3d93897e4f714a2ce01d9a62477c34f9
+      Hash: 8ef3c4a1c2733d8acfc7bea94070ad02
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
+    namespaceName: Worlds.DayNight
     className: DayNightSchedule
   - hash:
       serializedVersion: 2
@@ -1671,7 +1681,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerUIntField
   - hash:
       serializedVersion: 2
-      Hash: 59ef123fc90d6b45a73089ae229e33bc
+      Hash: ae26dc319f511739d5c69b47f3e25f83
     assemblyName: Assembly-CSharp.dll
     namespaceName: Worlds.Enemies
     className: BasicEnemyBehaviour
@@ -1713,7 +1723,7 @@ ScriptsOnlyBuild:
     className: ShadowCaster2D
   - hash:
       serializedVersion: 2
-      Hash: b605eb5d15c3b5e819c766f13e08de88
+      Hash: 060b1825799c31e3fc7f5c0eb689cdb9
     assemblyName: Assembly-CSharp.dll
     namespaceName: Worlds.Player
     className: PlayerCombat
@@ -1875,9 +1885,9 @@ ScriptsOnlyBuild:
     className: StandaloneInputModule
   - hash:
       serializedVersion: 2
-      Hash: 6936b51e4478cf07978b3d03f0feb4af
+      Hash: c3c225285f5ac110cc6d479360d27ec0
     assemblyName: Assembly-CSharp.dll
-    namespaceName: 
+    namespaceName: Worlds.Saves
     className: PrefrencesModifier
   - hash:
       serializedVersion: 2
@@ -1987,6 +1997,18 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: Worlds.UI
     className: WorldCanvasSetToMainCamera
+  - hash:
+      serializedVersion: 2
+      Hash: 45bfd70b7602b486b4f7440e88bb5704
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Worlds.WorldObjects
+    className: PlantManager
+  - hash:
+      serializedVersion: 2
+      Hash: 9c09bd6531616e70324b69b95b043443
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Worlds.Effects
+    className: AnimatorCallback
   platform: 5
   scenePathNames:
   - Assets/BaseGameAssets/Scenes/GameScene.unity

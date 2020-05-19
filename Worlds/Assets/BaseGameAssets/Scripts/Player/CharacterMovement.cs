@@ -38,7 +38,8 @@ namespace Worlds.Player
 
             var d_pos = (float3)transform.position + new float3(invert.x, 0, invert.z);
 
-            var spd = inputManager.ButtonsContains(Button.fire3) ? speed * runMultiplier : speed;
+            // Run unless otherwise told not to
+            var spd = inputManager.ButtonsContains(Button.fire3) ? speed : speed * runMultiplier;
 
             navAgent.speed = spd;
             navAgent.SetDestination(d_pos);
@@ -48,8 +49,13 @@ namespace Worlds.Player
                 lookVector = invert;
             }
 
+            // If we are already looking in the desired direction don't bother setting it.
+            if (CompareFloat3(lookVector, transform.rotation.eulerAngles))
+                return;
+
             if (inputManager.ButtonsContains(Button.fire2) == false)
                 transform.rotation = (Quaternion.LookRotation(lookVector));
+            else lookVector = transform.forward;
         }
     }
 }

@@ -2,5 +2,7 @@
     "screenX": 720,
     "screenY": 480,
     "fullScreen": true,
-    "masterVolume": 1.0
+    "usingAMPM": false,
+    "masterVolume": 1.0,
+    "quality": 2
 }

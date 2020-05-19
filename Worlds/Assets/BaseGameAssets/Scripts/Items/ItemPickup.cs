@@ -16,7 +16,7 @@ namespace Worlds.Items
                 // TODO
 
                 // Remove this object from the world
-                ObjectManager.localInstance.ReturnObject(gameObject);
+                ObjectManager.ReturnObject(gameObject);
             }
         }
     }

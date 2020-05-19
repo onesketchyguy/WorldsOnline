@@ -9,6 +9,7 @@ namespace Worlds
 
     public class WorldNetworkManager : NetworkManager
     {
+        public UnityEngine.Events.UnityEvent OnConnectEvent;
         public UnityEngine.Events.UnityEvent OnDisconnectEvent;
 
         public string DefaultUserName = "USER";
@@ -43,6 +44,9 @@ namespace Worlds
         public override void OnClientConnect(NetworkConnection conn)
         {
             base.OnClientConnect(conn);
+
+            if (OnConnectEvent != null)
+                OnConnectEvent.Invoke();
 
             // tell the server to create a player with this name
             PlayerName = (PlayerName != null && PlayerName.Length > 0) ? PlayerName : DefaultUserName;

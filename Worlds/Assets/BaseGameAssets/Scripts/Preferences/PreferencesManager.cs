@@ -1,28 +1,32 @@
-﻿public static class PreferencesManager
+﻿namespace Worlds.Saves
 {
-    public class Preferences
+    public static class PreferencesManager
     {
-        public int screenX = 1280;
-        public int screenY = 720;
-        public bool fullScreen = true;
-        public float masterVolume = 1;
-        public int quality = 2;
-    }
-
-    public static Preferences current_prefs;
-
-    public static void SaveSettings()
-    {
-        FileManager.Save(current_prefs, "Prefs", FileManager.Directories.prefrences);
-    }
-
-    public static void LoadSettings()
-    {
-        current_prefs = FileManager.Load<Preferences>("Prefs", FileManager.Directories.prefrences);
-
-        if (current_prefs == null)
+        public class Preferences
         {
-            current_prefs = new Preferences();
+            public int screenX = 1280;
+            public int screenY = 720;
+            public bool fullScreen = true;
+            public bool usingAMPM = true;
+            public float masterVolume = 1;
+            public int quality = 2;
+        }
+
+        public static Preferences current_prefs;
+
+        public static void SaveSettings()
+        {
+            FileManager.Save(current_prefs, "Prefs", FileManager.Directories.prefrences);
+        }
+
+        public static void LoadSettings()
+        {
+            current_prefs = FileManager.Load<Preferences>("Prefs", FileManager.Directories.prefrences);
+
+            if (current_prefs == null)
+            {
+                current_prefs = new Preferences();
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Worlds
 
             if (other != null) other.RpcModifyHealth(-damageToDeal);
 
-            ObjectManager.localInstance.ReturnObject(gameObject);
+            ObjectManager.ReturnObject(gameObject);
         }
     }
 }
