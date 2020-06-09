@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ namespace Worlds.Enemies
 
         private List<System.Action> UpdateActions = new List<System.Action>();
 
+        private List<BasicEnemyBehaviour> enemies = new List<BasicEnemyBehaviour>();
+
         public override void OnStartServer()
         {
             for (int i = 0; i < numberToSpawn; i++)
@@ -37,22 +40,26 @@ namespace Worlds.Enemies
             go.name = enemyToSpawn.name;
 
             var enemy = go.GetComponent<BasicEnemyBehaviour>();
-
             enemy.Initialize();
 
-            int index = UpdateActions.Count - 1;
-            if (index <= 0) index = 0;
-
+            // Ensure this enemy is recieving updates
             System.Action serverUpdate = () =>
             {
                 if (enemy != null)
                     enemy.OnServerUpdate();
+            };
 
-                if (enemy.healthManager.GetCurrentHealth() <= 0) // Remove this event
-                    UpdateActions.RemoveAt(index);
+            // Remove this units update event on death
+            enemy.healthManager.onDeathCallback += () =>
+            {
+                UpdateActions.Remove(serverUpdate);
+
+                // Repspawn a new random enemy
+                StartCoroutine(RespawnEnemy(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)].gameObject));
             };
 
             UpdateActions.Add(serverUpdate);
+            enemies.Add(enemy);
         }
 
         private void UpdateServer()
@@ -64,6 +71,12 @@ namespace Worlds.Enemies
                     UpdateActions[i].Invoke();
                 }
             }
+        }
+
+        private IEnumerator RespawnEnemy(GameObject enemyToRespawn)
+        {
+            yield return new WaitForSecondsRealtime(3);
+            SpawnEnemy(enemyToRespawn);
         }
 
         private void OnDrawGizmosSelected()

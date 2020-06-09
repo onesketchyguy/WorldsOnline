@@ -8,7 +8,7 @@ namespace Worlds.UI
 
         public GameObject objectToToggle;
 
-        private void OnEnable()
+        private void Start()
         {
             if (objectToToggle.activeSelf != defaultValue) Toggle();
         }

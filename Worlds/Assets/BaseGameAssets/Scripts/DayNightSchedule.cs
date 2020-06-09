@@ -10,6 +10,8 @@ namespace Worlds.DayNight
 
         [SerializeField] private float timeOfDay = 12;
 
+        [SerializeField] [Tooltip("Days per real life day")] private float dayDivider = 8;
+
         private void OnValidate()
         {
             if (timeOfDay > 24) timeOfDay = 0;
@@ -46,7 +48,10 @@ namespace Worlds.DayNight
             if (debug) return;
 #endif
 
-            float realTimePercent = (float)(System.DateTime.Now.TimeOfDay.TotalMinutes / 1440f);
+            var divider = (1440 / dayDivider);
+            var minute = System.DateTime.Now.TimeOfDay.TotalMinutes % divider;
+
+            float realTimePercent = (float)(minute / divider);
 
             TOD = (realTimePercent);
             timeOfDay = TOD * 24;
