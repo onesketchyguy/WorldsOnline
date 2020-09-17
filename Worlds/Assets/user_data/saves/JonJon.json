@@ -1,0 +1,13 @@
+{
+    "userName": "JonJon",
+    "stats": [
+        10,
+        8,
+        5,
+        3
+    ],
+    "health": 100.0,
+    "positionX": 0.0,
+    "positionY": 0.0,
+    "positionZ": 0.0
+}

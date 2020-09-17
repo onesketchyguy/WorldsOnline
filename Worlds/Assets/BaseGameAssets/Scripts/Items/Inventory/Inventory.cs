@@ -5,7 +5,7 @@ namespace Worlds.Items.Inventory
 {
     public class Inventory : MonoBehaviour
     {
-        internal List<ItemData> items;
+        internal List<ItemData> items = new List<ItemData>();
 
         public delegate void ItemsModifiedDelegate(ItemData[] items);
 
